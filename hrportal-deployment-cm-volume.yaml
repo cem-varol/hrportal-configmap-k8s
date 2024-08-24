@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hrportal
+  labels:
+    app: hrportal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hrportal
+  template:
+    metadata:
+      labels:
+        app: hrportal
+    spec:
+      containers:
+      - name: hrportal
+        image: xsantq/hrportal:01
+        ports:
+        - containerPort: 8080
+#        env:
+#          - name: SERVER_NAME
+#            valueFrom: 
+#              configMapKeyRef:
+#                name: hrportal-app-configmap
+#                key: server.name
+        volumeMounts:
+          - name: app-config-volume
+            mountPath: "/deployments/config"   
+      volumes:
+      - name: app-config-volume
+        configMap:
+          name: hrportal-volume-configmap
+          items:
+          - key: application.properties
+            path: application.properties 	
+      imagePullSecrets:
+      - name: dockerhubsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hrportal-service
+spec:
+  selector:
+    app: hrportal
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000

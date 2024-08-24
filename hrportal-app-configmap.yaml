@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  server.name: '******PRODSERVER*****'
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2024-08-24T19:00:10Z"
+  name: hrportal-app-configmap
+  namespace: default
+  resourceVersion: "4241"
+  uid: 6168540a-185e-4aba-8d8d-e54f89856118
